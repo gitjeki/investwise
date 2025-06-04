@@ -11,7 +11,15 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        // Register global middleware if needed
+        // $middleware->web(append: [
+        //     \App\Http\Middleware\TrustProxies::class,
+        // ]);
+
+        // Register route middleware
+        $middleware->alias([
+            'role' => \App\Http\Middleware\CheckRole::class, // Tambahkan baris ini
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
