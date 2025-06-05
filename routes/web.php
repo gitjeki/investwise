@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Auth\LoginRegisterController; // Pastikan controller ini ada, atau buat yang baru
+use App\Http\Controllers\RecommendationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +29,8 @@ Route::post('/login', [LoginRegisterController::class, 'authenticate']);
 Route::get('/register', [LoginRegisterController::class, 'register'])->name('register');
 Route::post('/register', [LoginRegisterController::class, 'store']);
 Route::post('/logout', [LoginRegisterController::class, 'logout'])->name('logout');
+Route::get('/recommendation', [RecommendationController::class, 'index'])->name('user.recommendation');
+Route::post('/recommendation/calculate', [RecommendationController::class, 'calculate'])->name('recommendation.calculate');
 
 
 // Redirect after successful login based on role
@@ -55,5 +58,5 @@ Route::middleware(['auth', 'role:user'])->prefix('user')->name('user.')->group(f
     Route::get('/dashboard', function () {
         return view('user.dashboard'); // Create this view
     })->name('dashboard');
-    // Add more user-specific routes here
+    Route::post('/recommendation/calculate', [RecommendationController::class, 'calculate'])->name('recommendation.calculate');
 });

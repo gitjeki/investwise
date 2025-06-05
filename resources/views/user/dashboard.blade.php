@@ -58,7 +58,7 @@
         <div class="card p-4 text-center">
             <h1 class="text-success">Welcome to User Dashboard!</h1>
             <p class="lead">Start exploring investment instruments and get recommendations.</p>
-            <a href="#" class="btn btn-success mt-3">Get Investment Recommendations</a>
+            <a href="{{ route('user.recommendation') }}" class="btn btn-success mt-3">Get Investment Recommendations</a>
         </div>
     </div>
 
