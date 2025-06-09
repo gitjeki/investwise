@@ -61,7 +61,7 @@ class LoginRegisterController extends Controller
             return redirect()->route('admin.dashboard')
                 ->withSuccess('You have successfully registered & logged in!');
         } else {
-            return redirect()->route('user.dashboard')
+            return redirect()->route('home')
                 ->withSuccess('You have successfully registered & logged in!');
         }
     }
@@ -99,7 +99,7 @@ class LoginRegisterController extends Controller
                 return redirect()->route('admin.dashboard')
                     ->withSuccess('You have successfully logged in as Admin!');
             } else {
-                return redirect()->route('user.dashboard')
+                return redirect()->route('home')
                     ->withSuccess('You have successfully logged in as User!');
             }
         }

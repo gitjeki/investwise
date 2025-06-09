@@ -143,7 +143,7 @@
                         </li>
                     @else
                         <li class="nav-item">
-                            <a class="btn btn-outline-primary me-2" href="{{ route('dashboard') }}">Dashboard</a>
+                            <a class="btn btn-outline-primary me-2" href="{{ route('home') }}">Home</a>
                         </li>
                         <li class="nav-item">
                             <form action="{{ route('logout') }}" method="POST" class="d-inline">
