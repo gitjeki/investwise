@@ -16,7 +16,6 @@ use App\Http\Controllers\InvestmentController;
 */
 
 // LANDING PAGE AWAL (PUBLIK - SEBELUM LOGIN)
-// Hanya route ini yang bisa diakses tanpa login.
 Route::get('/', function () {
     return view('welcome'); // Menampilkan resources/views/welcome.blade.php
 })->name('landing');
