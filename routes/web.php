@@ -2,17 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-<<<<<<< HEAD
-use App\Http\Controllers\Auth\LoginRegisterController; // Pastikan controller ini ada, atau buat yang baru
-use App\Http\Controllers\RecommendationController;
-=======
 use App\Http\Controllers\Auth\LoginRegisterController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RecommendationsController;
 use App\Http\Controllers\ArticlesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\InvestmentController;
->>>>>>> f5e2500bf7164ee065e4cf1903a68c0b173f61fb
 
 /*
 |--------------------------------------------------------------------------
@@ -32,8 +27,6 @@ Route::post('/login', [LoginRegisterController::class, 'authenticate']);
 Route::get('/register', [LoginRegisterController::class, 'register'])->name('register');
 Route::post('/register', [LoginRegisterController::class, 'store']);
 Route::post('/logout', [LoginRegisterController::class, 'logout'])->name('logout');
-Route::get('/recommendation', [RecommendationController::class, 'index'])->name('user.recommendation');
-Route::post('/recommendation/calculate', [RecommendationController::class, 'calculate'])->name('recommendation.calculate');
 
 
 // -------------- SEMUA RUTE DI BAWAH INI MEMBUTUHKAN LOGIN --------------
@@ -66,14 +59,6 @@ Route::group(['middleware' => ['auth']], function () {
         // Tambahkan lebih banyak rute khusus admin di sini
     });
 
-<<<<<<< HEAD
-// User Routes
-Route::middleware(['auth', 'role:user'])->prefix('user')->name('user.')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('user.dashboard'); // Create this view
-    })->name('dashboard');
-    Route::post('/recommendation/calculate', [RecommendationController::class, 'calculate'])->name('recommendation.calculate');
-=======
     // Route untuk User (hanya user yang sudah login)
     // Sebaiknya, rute user dashboard ini dipisah jika ada konten spesifik user yang beda dari home.
     Route::middleware('role:user')->prefix('user')->name('user.')->group(function () {
@@ -82,5 +67,4 @@ Route::middleware(['auth', 'role:user'])->prefix('user')->name('user.')->group(f
         })->name('home');
         // Tambahkan lebih banyak rute khusus user di sini
     });
->>>>>>> f5e2500bf7164ee065e4cf1903a68c0b173f61fb
 });
