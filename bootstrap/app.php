@@ -10,15 +10,10 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-    ->withMiddleware(function (Middleware $middleware) {
-        // Register global middleware if needed
-        // $middleware->web(append: [
-        //     \App\Http\Middleware\TrustProxies::class,
-        // ]);
-
-        // Register route middleware
+   ->withMiddleware(function (Middleware $middleware) {
+        // !! TAMBAHKAN ALIAS ANDA DI SINI !!
         $middleware->alias([
-            'role' => \App\Http\Middleware\CheckRole::class, // Tambahkan baris ini
+            'checkrole' => \App\Http\Middleware\CheckRole::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

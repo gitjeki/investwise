@@ -2,19 +2,22 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
-// Pastikan semua controller di-import di sini
+
+// Import semua controller yang dibutuhkan
 use App\Http\Controllers\Auth\LoginRegisterController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\RecommendationController;
 use App\Http\Controllers\ArticlesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\InvestmentController;
-// TAMBAHKAN IMPORT UNTUK CONTROLLER ADMIN
-use App\Http\Controllers\Admin\DashboardController; // Jika Anda membuatnya
-use App\Http\Controllers\Admin\CriteriaController;
-use App\Http\Controllers\Admin\SubCriteriaController;
-use App\Http\Controllers\Admin\InvestmentInstrumentController;
-use App\Http\Controllers\Admin\ScoreController;
+use App\Http\Controllers\RecommendationController;
+
+// Controller untuk Admin
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\CriteriaController as AdminCriteriaController;
+use App\Http\Controllers\Admin\SubCriteriaController as AdminSubCriteriaController;
+use App\Http\Controllers\Admin\InvestmentInstrumentController as AdminInvestmentInstrumentController;
+use App\Http\Controllers\Admin\ScoreController as AdminScoreController;
+use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
 
 
 /*
@@ -23,12 +26,12 @@ use App\Http\Controllers\Admin\ScoreController;
 |--------------------------------------------------------------------------
 */
 
-// LANDING PAGE AWAL (PUBLIK - SEBELUM LOGIN)
+// --- RUTE PUBLIK (SEBELUM LOGIN) ---
 Route::get('/', function () {
     return view('welcome');
 })->name('landing');
 
-// Authentication Routes
+// Autentikasi
 Route::get('/login', [LoginRegisterController::class, 'login'])->name('login');
 Route::post('/login', [LoginRegisterController::class, 'authenticate']);
 Route::get('/register', [LoginRegisterController::class, 'register'])->name('register');
@@ -36,49 +39,44 @@ Route::post('/register', [LoginRegisterController::class, 'store']);
 Route::post('/logout', [LoginRegisterController::class, 'logout'])->name('logout');
 
 
-// -------------- SEMUA RUTE DI BAWAH INI MEMBUTUHKAN LOGIN --------------
-Route::group(['middleware' => ['auth']], function () {
+// --- SEMUA RUTE DI BAWAH INI BUTUH LOGIN ---
+Route::middleware(['auth'])->group(function () {
 
-    // Rute dashboard utama yang mengarahkan berdasarkan role setelah login
+    // Pengarah utama setelah login
     Route::get('/dashboard', function () {
         if (Auth::user()->role == 'admin') {
             return redirect()->route('admin.dashboard');
-        } else {
-            return redirect()->route('home');
         }
+        return redirect()->route('home');
     })->name('dashboard');
 
-    // Rute Halaman Utama (Home) InvestWise untuk user yang sudah login
+    // Rute untuk User Biasa
     Route::get('/home', [HomeController::class, 'index'])->name('home');
     
-    // ... rute-rute user lainnya ...
+    // INI DIA RUTE YANG HILANG
+    Route::get('/articles', [ArticlesController::class, 'index'])->name('articles');
+
     Route::get('/user/recommendation', [RecommendationController::class, 'index'])->name('user.recommendation');
     Route::post('/user/recommendation/calculate', [RecommendationController::class, 'calculate'])->name('user.recommendation.calculate');
-    Route::get('/articles', [ArticlesController::class, 'index'])->name('articles');
+
+    // Pengaturan Profil User
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('password.update');
+    Route::get('/profile/history', [ProfileController::class, 'history'])->name('profile.history');
+    
     Route::get('/investment/{type}', [InvestmentController::class, 'show'])->name('investment.show');
 
 
-    // ==========================================================
-    // ==         INI BAGIAN YANG PERLU ANDA LENGKAPI          ==
-    // ==========================================================
-    Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
-        
-        // Dashboard khusus admin (Gunakan controller jika ada logika data)
+    // --- GRUP RUTE KHUSUS ADMIN ---
+    Route::middleware('checkrole:admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-        
-        // Rute untuk CRUD Kriteria Utama
-        Route::resource('criterias', CriteriaController::class);
-
-        // Rute untuk CRUD Sub-Kriteria
-        Route::resource('sub-criterias', SubCriteriaController::class);
-
-        // Rute untuk CRUD Instrumen Investasi
-        Route::resource('investment-instruments', InvestmentInstrumentController::class);
-
-        // Rute untuk Halaman Input Skor
-        Route::get('scores', [ScoreController::class, 'index'])->name('scores.index');
-        Route::post('scores', [ScoreController::class, 'store'])->name('scores.store');
+        Route::resource('criterias', AdminCriteriaController::class);
+        Route::resource('sub-criterias', AdminSubCriteriaController::class);
+        Route::resource('investment-instruments', AdminInvestmentInstrumentController::class);
+        Route::get('scores', [AdminScoreController::class, 'index'])->name('scores.index');
+        Route::post('scores', [AdminScoreController::class, 'store'])->name('scores.store');
+        Route::resource('articles', AdminArticleController::class);
     });
-
 });
