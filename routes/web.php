@@ -2,12 +2,20 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+// Pastikan semua controller di-import di sini
 use App\Http\Controllers\Auth\LoginRegisterController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RecommendationController;
 use App\Http\Controllers\ArticlesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\InvestmentController;
+// TAMBAHKAN IMPORT UNTUK CONTROLLER ADMIN
+use App\Http\Controllers\Admin\DashboardController; // Jika Anda membuatnya
+use App\Http\Controllers\Admin\CriteriaController;
+use App\Http\Controllers\Admin\SubCriteriaController;
+use App\Http\Controllers\Admin\InvestmentInstrumentController;
+use App\Http\Controllers\Admin\ScoreController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -20,7 +28,7 @@ Route::get('/', function () {
     return view('welcome');
 })->name('landing');
 
-// Authentication Routes (ini juga harus bisa diakses publik)
+// Authentication Routes
 Route::get('/login', [LoginRegisterController::class, 'login'])->name('login');
 Route::post('/login', [LoginRegisterController::class, 'authenticate']);
 Route::get('/register', [LoginRegisterController::class, 'register'])->name('register');
@@ -36,50 +44,41 @@ Route::group(['middleware' => ['auth']], function () {
         if (Auth::user()->role == 'admin') {
             return redirect()->route('admin.dashboard');
         } else {
-            // Setelah user biasa login, arahkan ke rute 'home'
             return redirect()->route('home');
         }
-    })->name('home'); // Nama rute ini adalah 'dashboard'
+    })->name('dashboard');
 
     // Rute Halaman Utama (Home) InvestWise untuk user yang sudah login
     Route::get('/home', [HomeController::class, 'index'])->name('home');
-
-    // Rute lain yang diakses oleh user yang sudah login
-    // Ini adalah rute yang sebelumnya ada di grup 'user.'
+    
+    // ... rute-rute user lainnya ...
     Route::get('/user/recommendation', [RecommendationController::class, 'index'])->name('user.recommendation');
     Route::post('/user/recommendation/calculate', [RecommendationController::class, 'calculate'])->name('user.recommendation.calculate');
-    
-    // Rute umum lain yang membutuhkan autentikasi
     Route::get('/articles', [ArticlesController::class, 'index'])->name('articles');
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
     Route::get('/investment/{type}', [InvestmentController::class, 'show'])->name('investment.show');
 
 
-    // Route untuk Admin (hanya admin yang sudah login)
+    // ==========================================================
+    // ==         INI BAGIAN YANG PERLU ANDA LENGKAPI          ==
+    // ==========================================================
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
-        Route::get('/dashboard', function () {
-            return view('admin.dashboard'); // Dashboard khusus admin
-        })->name('dashboard');
-        // Tambahkan lebih banyak rute khusus admin di sini
-        // Contoh: Route::get('/manage-instruments', [AdminController::class, 'instruments'])->name('instruments');
+        
+        // Dashboard khusus admin (Gunakan controller jika ada logika data)
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        
+        // Rute untuk CRUD Kriteria Utama
+        Route::resource('criterias', CriteriaController::class);
+
+        // Rute untuk CRUD Sub-Kriteria
+        Route::resource('sub-criterias', SubCriteriaController::class);
+
+        // Rute untuk CRUD Instrumen Investasi
+        Route::resource('investment-instruments', InvestmentInstrumentController::class);
+
+        // Rute untuk Halaman Input Skor
+        Route::get('scores', [ScoreController::class, 'index'])->name('scores.index');
+        Route::post('scores', [ScoreController::class, 'store'])->name('scores.store');
     });
 
-    // Catatan: Grup 'user.' di bawah ini Dihapus atau Diubah.
-    // Karena rute utama user setelah login adalah '/home', dan '/user/recommendation'
-    // sudah dipindahkan ke grup middleware 'auth' utama di atas.
-    // Jika ada rute spesifik user lain yang masih memerlukan prefix '/user',
-    // bisa buat grup terpisah atau pertimbangkan kembali strukturnya.
-    /*
-    // Contoh jika Anda ingin tetap ada grup user dengan prefix '/user'
-    Route::middleware(['auth', 'role:user'])->prefix('user')->name('user.')->group(function () {
-        // Jika Anda masih ingin ada halaman dashboard khusus user selain '/home'
-        // Route::get('/dashboard', function () {
-        //     return view('user.dashboard');
-        // })->name('dashboard');
-
-        // Rute rekomendasi sudah dipindahkan ke grup 'auth' utama di atas
-        // Route::get('/recommendation', [App\Http\Controllers\RecommendationController::class, 'index'])->name('recommendation');
-        // Route::post('/recommendation/calculate', [App\Http\Controllers\RecommendationController::class, 'calculate'])->name('recommendation.calculate');
-    });
-    */
 });
