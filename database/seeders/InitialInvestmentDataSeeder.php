@@ -40,33 +40,33 @@ class InitialInvestmentDataSeeder extends Seeder
                 ['option_text' => '> 5 Tahun', 'weight' => 100],
             ],
             'C3' => [ // Risiko (Cost criteria, but weight reflects preference for lower risk being higher score)
-                ['option_text' => 'Cukup Rendah', 'weight' => 100],
-                ['option_text' => 'Rendah', 'weight' => 75],
-                ['option_text' => 'Sedang', 'weight' => 50],
-                ['option_text' => 'Tinggi', 'weight' => 25],
+                ['option_text' => 'Jual semua', 'weight' => 100],
+                ['option_text' => 'Jual sebagian', 'weight' => 75],
+                ['option_text' => 'Simpan semua', 'weight' => 50],
+                ['option_text' => 'Beli lagi', 'weight' => 25],
             ],
-            'C4' => [
-                ['option_text' => 'Cukup Rendah', 'weight' => 25],
-                ['option_text' => 'Rendah', 'weight' => 35],
-                ['option_text' => 'Sedang', 'weight' => 50],
-                ['option_text' => 'Tinggi', 'weight' => 75],
-                ['option_text' => 'Sangat Tinggi', 'weight' => 100],
+            'C4' => [ // Imbal Hasil
+                ['option_text' => 'Saya, sama sekali tidak bisa menerima kerugian sekecil apapun walaupun berimbas dengan kecilnya keuntungan yang didapat', 'weight' => 25],
+                ['option_text' => 'Saya, lebih mengutamakan menghindari kerugian walaupun dengan keuntungan sedikit', 'weight' => 35],
+                ['option_text' => 'Saya, lebih mengutamakan maksimalkan keuntungan dengan toleransi kerugian sedang', 'weight' => 50],
+                ['option_text' => 'Saya, lebih mengutamakan maksimalkan keuntungan walaupun mempunyai risiko kerugian yang tinggi', 'weight' => 75],
+                ['option_text' => 'Saya, sangat mengutamakan keuntungan walaupun dengan risiko kehilangan semua modal awal saya', 'weight' => 100],
             ],
-            'C5' => [ // Tingkat Pengalaman (Benefit criteria, but weight reflects preference for lower experience being higher score)
-                ['option_text' => 'Sangat Terbatas', 'weight' => 100],
-                ['option_text' => 'Terbatas', 'weight' => 75],
-                ['option_text' => 'Baik', 'weight' => 50],
-                ['option_text' => 'Sangat Baik', 'weight' => 25],
+            'C5' => [ // Tingkat Pengalaman
+                ['option_text' => 'Sangat terbatas, tidak mengetahui mekanisme kerja Reksa Dana, saham, kripto, forex dan risikonya (ie. imbal hasil negatif)', 'weight' => 100],
+                ['option_text' => 'Terbatas, mengetahui dan cukup mengerti mekanisme kerja, jenis, perbedaan serta risikonya', 'weight' => 75],
+                ['option_text' => 'Baik, mengerti mekanisme kerja saham, kripto, forex. Dapat mengantisipasi risiko hasil investasi dari saham, kripto dan forex', 'weight' => 50],
+                ['option_text' => 'Sangat baik, sangat mengerti mekanisme (saham, kripto, forex) dan risiko berinvestasi di jenis ini.', 'weight' => 25],
             ],
-            'C6' => [ // Profil Individu (Benefit criteria, but weight reflects preference for "Terbatas" being higher score)
-                ['option_text' => 'Terbatas', 'weight' => 100],
-                ['option_text' => 'Sedang', 'weight' => 50],
-                ['option_text' => 'Bebas', 'weight' => 25],
+            'C6' => [ // Profil Individu
+                ['option_text' => 'Saya tipe orang yang cenderung tidak memiliki waktu untuk memantau nilai aset investasi yang dimiliki.', 'weight' => 100],
+                ['option_text' => 'Saya tipe orang yang cenderung meluangkan sedikit waktu untuk memantau nilai aset investasi yang dimiliki', 'weight' => 50],
+                ['option_text' => 'Saya tipe orang yang cenderung memiliki banyak waktu luang untuk terus memantau pergerakan nilai naik turunnya aset investasi yang dimiliki', 'weight' => 25],
             ],
-            'C7' => [ // Kebutuhan Likuiditas (Benefit criteria)
-                ['option_text' => 'Tinggi', 'weight' => 100],
-                ['option_text' => 'Sedang', 'weight' => 50],
-                ['option_text' => 'Rendah', 'weight' => 25],
+            'C7' => [ // Kebutuhan Likuiditas
+                ['option_text' => 'Aset dapat dicairkan kapan saja tanpa penurunan nilai yang berarti. Proses penjualan cepat dan mudah, biasanya dalam hitungan menit hingga beberapa hari.', 'weight' => 100],
+                ['option_text' => 'Aset memerlukan waktu tertentu untuk dicairkan, biasanya dalam hitungan minggu. Mungkin ada sedikit penurunan harga saat dijual, tergantung pada kondisi pasar.', 'weight' => 50],
+                ['option_text' => 'Aset sulit dicairkan dan membutuhkan waktu lama, bisa berbulan-bulan, serta berisiko mengalami penurunan harga signifikan jika dijual terburu-buru.', 'weight' => 25],
             ],
         ];
 
