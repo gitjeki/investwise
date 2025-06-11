@@ -3,8 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - Investment DSS</title>
+    <title>Register - InvestWise</title> {{-- Ubah Judul Halaman --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+
     <style>
         body {
             margin: 0;
@@ -12,7 +17,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(to right, #e0ffe0, #ffffe0);
+            background: linear-gradient(to right, #e0ffe0, #ffffe0); /* Konsisten dengan login */
         }
         .container-fluid {
             height: 100%;
@@ -42,15 +47,37 @@
             width: 200px;
             height: auto;
         }
+
+        /* Gaya Font Kustom - Sama dengan halaman Login */
+        .app-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            color: #198754; /* Warna hijau Bootstrap */
+        }
+        .app-slogan {
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+            color: #6c757d; /* Warna text-muted Bootstrap */
+        }
+        /* Penyesuaian ukuran dan margin untuk tampilan yang lebih menarik - Sama dengan halaman Login */
+        .logo-container h2 {
+            font-size: 2.5rem;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .logo-container p {
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
     </style>
 </head>
 <body>
     <div class="container-fluid">
         <div class="left-panel">
             <div class="logo-container">
-                <img src="{{ asset('images/logo.png') }}" alt="DSS Logo" class="logo">
-                <h2 class="mt-3 text-success">Investment DSS</h2>
-                <p class="text-muted">Decision Support System for Investment Instruments</p>
+                <img src="{{ asset('images/logo.png') }}" alt="InvestWise Logo" class="logo"> {{-- Sesuaikan alt text --}}
+                <h2 class="app-title">InvestWise</h2> {{-- Gunakan class kustom --}}
+                <p class="app-slogan">Your Smart Partner for Confident Investment Decisions</p> {{-- Gunakan class kustom --}}
             </div>
         </div>
         <div class="right-panel">

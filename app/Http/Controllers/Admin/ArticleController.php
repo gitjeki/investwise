@@ -6,8 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Article;
 use Illuminate\Support\Facades\Storage;
-// use Illuminate\Support\Str; // HAPUS INI JIKA TIDAK ADA LAGI USE LAIN UNTUK STR
-// use Illuminate\Validation\Rule; // HAPUS INI JIKA TIDAK ADA LAGI USE LAIN UNTUK RULE
 
 class ArticleController extends Controller
 {
@@ -37,24 +35,12 @@ class ArticleController extends Controller
             $imagePath = $request->file('image')->store('articles', 'public');
         }
 
-        // HAPUS LOGIKA SLUG DI SINI
-        /*
-        $slug = Str::slug($validatedData['title']);
-        $originalSlug = $slug;
-        $count = 1;
-        while (Article::where('slug', $slug)->exists()) {
-            $slug = $originalSlug . '-' . $count;
-            $count++;
-        }
-        */
-
         Article::create([
             'title' => $validatedData['title'],
             'category' => $validatedData['category'],
             'body' => $validatedData['body'],
             'image_path' => $imagePath,
             'published_at' => $validatedData['published_at'],
-            // 'slug' => $slug, // HAPUS INI
         ]);
 
         return redirect()->route('admin.articles.index')->with('success', 'Artikel berhasil dibuat!');
@@ -83,24 +69,12 @@ class ArticleController extends Controller
             $imagePath = $request->file('image')->store('articles', 'public');
         }
 
-        // HAPUS LOGIKA SLUG DI SINI
-        /*
-        $slug = Str::slug($validatedData['title']);
-        $originalSlug = $slug;
-        $count = 1;
-        while (Article::where('slug', $slug)->where('id', '!=', $article->id)->exists()) {
-            $slug = $originalSlug . '-' . $count;
-            $count++;
-        }
-        */
-
         $article->update([
             'title' => $validatedData['title'],
             'category' => $validatedData['category'],
             'body' => $validatedData['body'],
             'image_path' => $imagePath,
             'published_at' => $validatedData['published_at'],
-            // 'slug' => $slug, // HAPUS INI
         ]);
 
         return redirect()->route('admin.articles.index')->with('success', 'Artikel berhasil diperbarui!');

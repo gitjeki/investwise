@@ -20,7 +20,7 @@
         /* Gaya dasar untuk body, konsisten dengan front-end */
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(to right, #e0ffe0, #f0fff0); /* Gradasi hijau sangat pucat */
+            background: linear-gradient(to bottom right, #e0ffe0, #d1fae5, #ffffff);
             min-height: 100vh;
             display: flex; /* Mengaktifkan flexbox untuk layout utama */
             flex-direction: column; /* Kolom utama untuk sticky footer */
@@ -161,7 +161,7 @@
                     <li>
                         <a href="#" id="masterDataToggle" 
                            class="justify-between {{ request()->routeIs('admin.criterias.*') || request()->routeIs('admin.investment-instruments.*') || request()->routeIs('admin.calculation-histories.*') ? 'active' : '' }}">
-                            <span><i class="fas fa-database icon"></i> Master Data</span>
+                            <span><i class="fas fa-database icon"></i>Master Data</span>
                             <span class="ml-auto transform transition-transform duration-200" id="masterDataArrow"><i class="fas fa-chevron-right text-xs"></i></span>
                         </a>
                         <ul class="submenu space-y-2" id="masterDataSubmenu">
@@ -192,7 +192,7 @@
                            <i class="fas fa-newspaper icon"></i> Articles
                         </a>
                     </li>
-                    <li>
+                                        <li>
                         <form method="POST" action="{{ route('logout') }}" class="w-full">
                             {{-- Ubah class tombol logout di sini --}}
                             @csrf

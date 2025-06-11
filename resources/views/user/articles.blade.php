@@ -17,23 +17,27 @@
             @foreach ($articles as $article)
             <div class="bg-white rounded-lg shadow-lg overflow-hidden transform hover:-translate-y-2 transition-transform duration-300 ease-in-out">
                 {{-- Gambar Artikel --}}
-                {{-- Gunakan kolom 'image' dari database --}}
+                {{-- Gunakan kolom 'image_path' dari database --}}
                 <a href="#">
-                    <img src="{{ $article->image ?? 'https://placehold.co/600x400/EAF4E4/333?text=Article' }}" alt="Gambar artikel tentang {{ $article->title }}" class="w-full h-48 object-cover">
+                    @if ($article->image_path)
+                        {{-- Gunakan Storage::url() untuk path file, atau langsung jika itu adalah URL eksternal lama --}}
+                        <img src="{{ filter_var($article->image_path, FILTER_VALIDATE_URL) ? $article->image_path : Storage::url($article->image_path) }}" 
+                             alt="Gambar artikel tentang {{ $article->title }}" class="w-full h-48 object-cover">
+                    @else
+                        {{-- Placeholder jika tidak ada gambar --}}
+                        <img src="https://placehold.co/600x400/EAF4E4/333?text=No+Image" alt="No Article Image" class="w-full h-48 object-cover">
+                    @endif
                 </a>
                 
                 <div class="p-6">
                     {{-- Kategori dan Tanggal --}}
                     <div class="flex justify-between items-center text-sm text-gray-500 mb-2">
-                        {{-- Gunakan kolom 'category' dari database --}}
                         <p class="font-semibold text-green-600">{{ $article->category }}</p>
-                        
-                        {{-- PERBAIKAN: Gunakan kolom 'published_at' dari database --}}
-                        <p>{{ $article->published_at->format('d M Y') }}</p>
+                        {{-- Perbaikan untuk published_at yang bisa null --}}
+                        <p>{{ $article->published_at ? $article->published_at->format('d M Y') : 'Draft' }}</p>
                     </div>
 
                     {{-- Judul Artikel --}}
-                    {{-- Gunakan kolom 'title' dari database --}}
                     <h2 class="text-xl font-bold text-gray-800 mb-3 leading-tight">
                         <a href="#" class="hover:text-green-700 transition-colors duration-200">
                             {{ $article->title }}
@@ -41,7 +45,6 @@
                     </h2>
 
                     {{-- Deskripsi Singkat --}}
-                    {{-- PERBAIKAN: Gunakan kolom 'body' dari database, lalu kita potong --}}
                     <p class="text-gray-600 text-base mb-4">
                         {{ Str::limit($article->body, 100) }}
                     </p>
