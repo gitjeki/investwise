@@ -1,4 +1,5 @@
 @extends('layouts.admin')
+
 @section('title', 'Edit Kriteria')
 @section('content')
     <div class="container mx-auto p-4">

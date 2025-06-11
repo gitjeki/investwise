@@ -15,20 +15,15 @@ class Article extends Model
      * @var array<int, string>
      */
     // INI BAGIAN YANG MEMPERBAIKI ERRORNYA
+        // Tambahkan 'image_path' ke array fillable
     protected $fillable = [
         'title',
-        'slug',
         'category',
         'body',
-        'image',
+        'image_path', // TAMBAHKAN INI
         'published_at',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'published_at' => 'datetime',
     ];

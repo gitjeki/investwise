@@ -16,8 +16,9 @@
     use App\Http\Controllers\Admin\CriteriaController as AdminCriteriaController;
     use App\Http\Controllers\Admin\SubCriteriaController as AdminSubCriteriaController;
     use App\Http\Controllers\Admin\InvestmentInstrumentController as AdminInvestmentInstrumentController;
-    use App\Http\Controllers\Admin\ScoreController as AdminScoreController;
+    // use App\Http\Controllers\Admin\ScoreController as AdminScoreController;
     use App\Http\Controllers\Admin\ArticleController as AdminArticleController;
+    use App\Http\Controllers\Admin\CalculationHistoryController;
 
 
     /*
@@ -77,9 +78,15 @@
             Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
             Route::resource('criterias', AdminCriteriaController::class);
             Route::resource('sub-criterias', AdminSubCriteriaController::class);
+            Route::post('criterias/{criteria}/subcriterias', [App\Http\Controllers\Admin\CriteriaController::class, 'storeSubCriteria'])->name('criterias.subcriterias.store');
+            Route::get('criterias/{criteria}/subcriterias', [App\Http\Controllers\Admin\CriteriaController::class, 'manageSubCriterias'])->name('criterias.subcriterias.index');
+            Route::put('subcriterias/{subcriteria}', [App\Http\Controllers\Admin\CriteriaController::class, 'updateSubCriteria'])->name('subcriterias.update');
+            Route::delete('subcriterias/{subcriteria}', [App\Http\Controllers\Admin\CriteriaController::class, 'destroySubCriteria'])->name('subcriterias.destroy');
             Route::resource('investment-instruments', AdminInvestmentInstrumentController::class);
-            Route::get('scores', [AdminScoreController::class, 'index'])->name('scores.index');
-            Route::post('scores', [AdminScoreController::class, 'store'])->name('scores.store');
+            Route::get('calculation-histories', [CalculationHistoryController::class, 'index'])->name('calculation-histories.index');
+            Route::delete('calculation-histories/{calculationHistory}', [CalculationHistoryController::class, 'destroy'])->name('calculation-histories.destroy');
+            // Route::get('scores', [AdminScoreController::class, 'index'])->name('scores.index');
+            // Route::post('scores', [AdminScoreController::class, 'store'])->name('scores.store');
             Route::resource('articles', AdminArticleController::class);
         });
     });

@@ -3,93 +3,116 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Article;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use App\Models\Article;
+use Illuminate\Support\Facades\Storage;
+// use Illuminate\Support\Str; // HAPUS INI JIKA TIDAK ADA LAGI USE LAIN UNTUK STR
+// use Illuminate\Validation\Rule; // HAPUS INI JIKA TIDAK ADA LAGI USE LAIN UNTUK RULE
 
 class ArticleController extends Controller
 {
-    /**
-     * Menampilkan halaman utama manajemen artikel dengan tabel.
-     */
     public function index()
     {
-        $articles = Article::latest()->get(); // Mengambil semua artikel, yang terbaru di atas
+        $articles = Article::latest()->get();
         return view('admin.articles.index', compact('articles'));
     }
 
-    /**
-     * Menampilkan form untuk membuat artikel baru.
-     */
     public function create()
     {
         return view('admin.articles.create');
     }
 
-    /**
-     * Menyimpan artikel baru ke database.
-     */
     public function store(Request $request)
     {
-        $request->validate([
+        $validatedData = $request->validate([
             'title' => 'required|string|max:255',
-            'category' => 'required|string|max:100',
+            'category' => 'required|string|max:255',
             'body' => 'required|string',
-            'image' => 'nullable|url', // Bisa URL atau nanti kita ubah ke file upload
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'published_at' => 'nullable|date',
         ]);
 
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('articles', 'public');
+        }
+
+        // HAPUS LOGIKA SLUG DI SINI
+        /*
+        $slug = Str::slug($validatedData['title']);
+        $originalSlug = $slug;
+        $count = 1;
+        while (Article::where('slug', $slug)->exists()) {
+            $slug = $originalSlug . '-' . $count;
+            $count++;
+        }
+        */
+
         Article::create([
-            'title' => $request->title,
-            'slug' => Str::slug($request->title), // Membuat slug otomatis dari judul
-            'category' => $request->category,
-            'body' => $request->body,
-            'image' => $request->image,
-            'published_at' => $request->published_at,
+            'title' => $validatedData['title'],
+            'category' => $validatedData['category'],
+            'body' => $validatedData['body'],
+            'image_path' => $imagePath,
+            'published_at' => $validatedData['published_at'],
+            // 'slug' => $slug, // HAPUS INI
         ]);
 
-        return redirect()->route('admin.articles.index')->with('success', 'Artikel berhasil ditambahkan.');
+        return redirect()->route('admin.articles.index')->with('success', 'Artikel berhasil dibuat!');
     }
 
-    /**
-     * Menampilkan form untuk mengedit artikel.
-     */
     public function edit(Article $article)
     {
         return view('admin.articles.edit', compact('article'));
     }
 
-    /**
-     * Memperbarui artikel di database.
-     */
     public function update(Request $request, Article $article)
     {
-        $request->validate([
+        $validatedData = $request->validate([
             'title' => 'required|string|max:255',
-            'category' => 'required|string|max:100',
+            'category' => 'required|string|max:255',
             'body' => 'required|string',
-            'image' => 'nullable|url',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'published_at' => 'nullable|date',
         ]);
 
+        $imagePath = $article->image_path;
+        if ($request->hasFile('image')) {
+            if ($article->image_path && !filter_var($article->image_path, FILTER_VALIDATE_URL)) {
+                Storage::disk('public')->delete($article->image_path);
+            }
+            $imagePath = $request->file('image')->store('articles', 'public');
+        }
+
+        // HAPUS LOGIKA SLUG DI SINI
+        /*
+        $slug = Str::slug($validatedData['title']);
+        $originalSlug = $slug;
+        $count = 1;
+        while (Article::where('slug', $slug)->where('id', '!=', $article->id)->exists()) {
+            $slug = $originalSlug . '-' . $count;
+            $count++;
+        }
+        */
+
         $article->update([
-            'title' => $request->title,
-            'slug' => Str::slug($request->title),
-            'category' => $request->category,
-            'body' => $request->body,
-            'image' => $request->image,
-            'published_at' => $request->published_at,
+            'title' => $validatedData['title'],
+            'category' => $validatedData['category'],
+            'body' => $validatedData['body'],
+            'image_path' => $imagePath,
+            'published_at' => $validatedData['published_at'],
+            // 'slug' => $slug, // HAPUS INI
         ]);
 
-        return redirect()->route('admin.articles.index')->with('success', 'Artikel berhasil diperbarui.');
+        return redirect()->route('admin.articles.index')->with('success', 'Artikel berhasil diperbarui!');
     }
 
-    /**
-     * Menghapus artikel dari database.
-     */
     public function destroy(Article $article)
     {
+        if ($article->image_path && !filter_var($article->image_path, FILTER_VALIDATE_URL)) {
+            Storage::disk('public')->delete($article->image_path);
+        }
         $article->delete();
-        return redirect()->route('admin.articles.index')->with('success', 'Artikel berhasil dihapus.');
+
+        return redirect()->route('admin.articles.index')->with('success', 'Artikel berhasil dihapus!');
     }
 }
