@@ -57,6 +57,7 @@
             </div>
             <div class="flex items-center space-x-6">
                 <a href="{{ route('home') }}" class="text-gray-600 hover:text-green-600 transition duration-300">Home</a>
+                {{-- Pastikan ini memanggil 'user.recommendation.intro' --}}
                 <a href="{{ route('user.recommendation.intro') }}" class="text-gray-600 hover:text-green-600 transition duration-300">Recommendations</a>
                 <a href="{{ route('articles') }}" class="text-gray-600 hover:text-green-600 transition duration-300">Articles</a>
                 <a href="{{ route('profile') }}" class="text-gray-600 hover:text-green-600 transition duration-300">
@@ -79,7 +80,7 @@
             <span class="smart-method-close" onclick="closeSmartMethodPopup()">&times;</span>
             <h2 class="text-2xl font-bold mb-4">SMART Method DSS</h2>
             <p class="text-gray-700 text-left">
-               SMART (Simple Multi-Attribute Rating Technique) is a decision support system that helps evaluate and rank alternatives based on multiple criteria. It's used to solve multi-criteria decision-making problems, where each alternative is evaluated based on its performance against several attributes, each with a defined weight. The method calculates an overall score for each alternative by summing up the weighted performance scores, allowing for a structured comparison and selection of the best option. 
+                SMART (Simple Multi-Attribute Rating Technique) is a decision support system that helps evaluate and rank alternatives based on multiple criteria. It's used to solve multi-criteria decision-making problems, where each alternative is evaluated based on its performance against several attributes, each with a defined weight. The method calculates an overall score for each alternative by summing up the weighted performance scores, allowing for a structured comparison and selection of the best option.
             </p>
         </div>
     </div>
