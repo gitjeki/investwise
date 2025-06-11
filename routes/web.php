@@ -10,6 +10,10 @@ use App\Http\Controllers\RecommendationController;
 use App\Http\Controllers\ArticlesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\InvestmentController;
+use App\Models\InvestmentInstrument;
+use App\Models\Criteria;
+use App\Models\CalculationHistory;
+use App\Http\Controllers\Admin\InvestmentInstrumentController as AdminInvestmentInstrumentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,9 +57,11 @@ Route::middleware(['auth'])->group(function () {
 
     // Rute lain yang diakses oleh user yang sudah login
     // Ini adalah rute yang sebelumnya ada di grup 'user.'
-    Route::get('/user/recommendation', [RecommendationController::class, 'index'])->name('user.recommendation');
+    Route::get('/user/recommendation', [RecommendationController::class, 'intro'])->name('user.recommendation.intro');
     Route::post('/user/recommendation/calculate', [RecommendationController::class, 'calculate'])->name('user.recommendation.calculate');
-    
+    Route::get('/user/recommendation/questions/{step?}', [App\Http\Controllers\RecommendationController::class, 'showQuestion'])->name('user.recommendation.questions');
+    Route::post('/user/recommendation/questions/submit', [App\Http\Controllers\RecommendationController::class, 'submitQuestion'])->name('user.recommendation.submit_question');
+
     // Rute umum lain yang membutuhkan autentikasi
     Route::get('/articles', [ArticlesController::class, 'index'])->name('articles');
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
@@ -73,8 +79,24 @@ Route::middleware(['auth'])->group(function () {
     // Route untuk Admin (hanya admin yang sudah login)
     Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/dashboard', function () {
-            return view('admin.dashboard'); // Dashboard khusus admin
+            $jumlahInstrument = InvestmentInstrument::count();
+            $jumlahKriteria = Criteria::count();
+            $jumlahPerhitungan = CalculationHistory::count();
+    
+            $rekomendasiTeratas = [];
+            $latestHistory = CalculationHistory::latest()->first();
+            if ($latestHistory) {
+                $rekomendasiTeratas = $latestHistory->calculated_rankings;
+            }
+    
+            return view('admin.dashboard', compact('jumlahInstrument', 'jumlahKriteria', 'jumlahPerhitungan', 'rekomendasiTeratas'));
         })->name('dashboard');
+        Route::resource('investment-instruments', AdminInvestmentInstrumentController::class); // Ini akan membuat index, create, store, edit, update, show, destroy
+        
+        Route::resource('criterias', AdminCriteriaController::class);
+
+        // ... rute subcriterias tambahan (jika ada) ...
+        Route::get('criterias/{criteria}/subcriterias', [AdminCriteriaController::class, 'manageSubCriterias'])->name('criterias.subcriterias.index');// ...
         // Tambahkan lebih banyak rute khusus admin di sini
         // Contoh: Route::get('/manage-instruments', [AdminController::class, 'instruments'])->name('instruments');
     });

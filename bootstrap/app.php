@@ -20,6 +20,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'checkrole' => \App\Http\Middleware\CheckRole::class,
         ]);
+        $middleware->alias([
+            // Pastikan baris ini benar
+            'role' => \App\Http\Middleware\CheckRole::class, // Ini harus menunjuk ke kelas middleware Anda
+        ]);
+    
     })
     
     ->withExceptions(function (Exceptions $exceptions) {

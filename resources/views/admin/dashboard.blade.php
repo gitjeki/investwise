@@ -22,9 +22,35 @@
             <h3 class="text-gray-500 text-sm">Jumlah Data Perhitungan</h3>
             <p class="text-3xl font-bold mt-2">{{ $jumlahPerhitungan }}</p>
         </div>
-        <div class="bg-white p-6 rounded-lg shadow-md">
-            <h3 class="text-gray-500 text-sm">Paling Banyak direkomendasikan</h3>
-            <p class="text-3xl font-bold mt-2">{{ $rekomendasiTeratas }}</p>
+        <div class="div class="bg-white p-6 rounded-lg shadow-md mb-8">
+    <h3 class="text-gray-800 text-lg font-bold mb-4">Paling Banyak Direkomendasikan (Terakhir Dihitung)</h3>
+
+    @if (!empty($rekomendasiTeratas))
+        <div class="table-responsive">
+            <table class="table-auto w-full text-left">
+                <thead>
+                    <tr>
+                        <th class="px-4 py-2 border-b-2 border-gray-200 bg-gray-50 text-gray-600 text-xs font-semibold uppercase tracking-wider">Rank</th>
+                        <th class="px-4 py-2 border-b-2 border-gray-200 bg-gray-50 text-gray-600 text-xs font-semibold uppercase tracking-wider">Alternative</th>
+                        <th class="px-4 py-2 border-b-2 border-gray-200 bg-gray-50 text-gray-600 text-xs font-semibold uppercase tracking-wider">Jenis</th>
+                        <th class="px-4 py-2 border-b-2 border-gray-200 bg-gray-50 text-gray-600 text-xs font-semibold uppercase tracking-wider">Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($rekomendasiTeratas as $altName => $data)
+                        <tr>
+                            <td class="px-4 py-2 border-b border-gray-200 text-sm">{{ $data['rank'] }}</td>
+                            <td class="px-4 py-2 border-b border-gray-200 text-sm font-medium">{{ $altName }}</td>
+                            <td class="px-4 py-2 border-b border-gray-200 text-sm">{{ $data['type'] }}</td>
+                            <td class="px-4 py-2 border-b border-gray-200 text-sm">{{ number_format($data['score'], 3) }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
+    @else
+        <p class="text-gray-600 text-sm">Belum ada data perhitungan rekomendasi terbaru.</p>
+    @endif
+</div>
     </div>
 @endsection
