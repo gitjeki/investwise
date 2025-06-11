@@ -68,10 +68,9 @@
         Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
         Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('password.update');
-        Route::get('/profile/history', [ProfileController::class, 'history'])->name('profile.history');
         
         Route::get('/investment/{type}', [InvestmentController::class, 'show'])->name('investment.show');
-
+        Route::get('/profile/history', [App\Http\Controllers\ProfileController::class, 'showHistory'])->name('profile.history');
 
         // --- GRUP RUTE KHUSUS ADMIN ---
         Route::middleware('checkrole:admin')->prefix('admin')->name('admin.')->group(function () {

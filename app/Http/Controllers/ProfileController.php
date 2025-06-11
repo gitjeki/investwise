@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
+use App\Models\Criteria; 
+use App\Models\SubCriteria;
 
 class ProfileController extends Controller
 {
@@ -66,10 +68,16 @@ class ProfileController extends Controller
     }
 
 
-    public function history()
+    public function showHistory()
     {
-        // Nanti, di sini kita akan mengambil data riwayat dari database
-        // $histories = auth()->user()->calculationHistories;
-        return view('user.profile_history'); // Kita akan buat view ini
+        // Ambil semua history perhitungan untuk user yang sedang login, diurutkan dari yang terbaru
+        $histories = Auth::user()->calculationHistories()->latest()->get();
+
+        // Ambil semua kriteria dan sub-kriteria untuk mapping ID ke nama/teks opsi
+        // Ini penting karena user_preferences menyimpan ID, bukan nama/teks
+        $criterias = Criteria::all()->keyBy('id'); // Mengindeks Collection berdasarkan ID kriteria
+        $subCriterias = SubCriteria::all()->keyBy('id'); // Mengindeks Collection berdasarkan ID sub-kriteria
+
+        return view('profile.history', compact('histories', 'criterias', 'subCriterias'));
     }
 }

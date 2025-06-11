@@ -213,6 +213,14 @@ class RecommendationController extends Controller
             'top5Recommendations' => array_slice($rankedRecommendations, 0, 5, true),
             'investmentInstruments' => $investmentInstruments,
         ]);
+
+        if (Auth::check()) { // Hanya simpan jika user terautentikasi
+            CalculationHistory::create([
+                'user_id' => Auth::id(),
+                'user_preferences' => $userSelectedOptions, // Simpan ID sub-kriteria yang dipilih dari sesi
+                'calculated_rankings' => array_slice($rankedRecommendations, 0, 5, true), // Simpan top 5 rekomendasi
+            ]);
+        }
     }
 
     // Metode untuk menampilkan hasil jika diakses langsung (misal dari history atau setelah perhitungan)
