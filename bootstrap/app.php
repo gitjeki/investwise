@@ -11,22 +11,17 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        // Register global middleware if needed
-        // $middleware->web(append: [
-        //     \App\Http\Middleware\TrustProxies::class,
-        // ]);
-
-        // Register route middleware
+        // !! TAMBAHKAN ALIAS ANDA DI SINI !!
         $middleware->alias([
             'checkrole' => \App\Http\Middleware\CheckRole::class,
         ]);
-        $middleware->alias([
-            // Pastikan baris ini benar
-            'role' => \App\Http\Middleware\CheckRole::class, // Ini harus menunjuk ke kelas middleware Anda
-        ]);
-    
+
+        // Anda juga bisa menambahkan middleware ke grup tertentu di sini, jika perlu
+        // Contoh:
+        // $middleware->web(append: [
+        //     MyCustomWebMiddleware::class,
+        // ]);
     })
-    
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();
