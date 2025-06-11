@@ -1,10 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>InvestWise</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+    <!-- Fonts (Standard Laravel way) -->
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+
+    <!-- Scripts and CSS via Vite (INI ADALAH PERBAIKANNYA) -->
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <!-- Custom styles for your popup (Tetap di sini) -->
     <style>
         .smart-method-popup {
             display: none;
@@ -36,10 +45,10 @@
     </style>
 </head>
 <body class="font-sans bg-gray-50">
+    <!-- Navbar Anda (Tidak diubah) -->
     <nav class="bg-white shadow-md p-4">
         <div class="container mx-auto flex justify-between items-center">
             <div class="flex items-center space-x-2">
-                {{-- Ini adalah placeholder untuk logo InvestWise --}}
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c1.657 0 3 1.343 3 3v2a3 3 0 01-3 3 3 3 0 01-3-3v-2c0-1.657 1.343-3 3-3z" />
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18c-3.866 0-7-3.134-7-7V9a7 7 0 0114 0v2c0 3.866-3.134 7-7 7z" />
@@ -59,10 +68,12 @@
         </div>
     </nav>
 
+    <!-- Main content area -->
     <main class="container mx-auto py-8 px-4">
         @yield('content')
     </main>
 
+    <!-- Popup Anda (Tidak diubah) -->
     <div id="smartMethodPopup" class="smart-method-popup">
         <div class="smart-method-content">
             <span class="smart-method-close" onclick="closeSmartMethodPopup()">&times;</span>
@@ -83,6 +94,7 @@
         </div>
     </div>
 
+    <!-- Script Anda (Tidak diubah) -->
     <script>
         function openSmartMethodPopup() {
             document.getElementById('smartMethodPopup').style.display = 'flex';

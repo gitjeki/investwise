@@ -10,13 +10,6 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-    
-    ->withMiddleware(function (Middleware $middleware) {
-        $middleware->web(append: [
-            \Illuminate\Session\Middleware\StartSession::class, // PASTIKAN INI ADA
-        ]);
-    })
-
     ->withMiddleware(function (Middleware $middleware) {
         // Register global middleware if needed
         // $middleware->web(append: [
@@ -25,7 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // Register route middleware
         $middleware->alias([
-            'role' => \App\Http\Middleware\CheckRole::class, // Tambahkan baris ini
+            'checkrole' => \App\Http\Middleware\CheckRole::class,
         ]);
     })
     
