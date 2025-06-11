@@ -77,19 +77,9 @@
     <div id="smartMethodPopup" class="smart-method-popup">
         <div class="smart-method-content">
             <span class="smart-method-close" onclick="closeSmartMethodPopup()">&times;</span>
-            <h2 class="text-2xl font-bold mb-4">Mengenai Metode SMART</h2>
+            <h2 class="text-2xl font-bold mb-4">SMART Method DSS</h2>
             <p class="text-gray-700 text-left">
-                Metode SMART adalah akronim untuk kriteria penetapan tujuan:
-                <br><br>
-                <strong>S - Specific (Spesifik):</strong> Tujuan harus jelas dan spesifik, tidak umum. Apa yang ingin Anda capai? Siapa yang terlibat? Kapan ini akan terjadi? Di mana ini akan terjadi? Mengapa tujuan ini penting?
-                <br><br>
-                <strong>M - Measurable (Terukur):</strong> Tujuan harus dapat diukur sehingga Anda dapat melacak kemajuan dan tahu kapan Anda telah mencapai tujuan tersebut. Bagaimana Anda akan tahu jika Anda telah mencapai tujuan?
-                <br><br>
-                <strong>A - Achievable (Dapat Dicapai):</strong> Tujuan harus realistis dan dapat dicapai. Apakah tujuan ini realistis mengingat sumber daya dan kendala Anda?
-                <br><br>
-                <strong>R - Relevant (Relevan):</strong> Tujuan harus relevan dengan tujuan dan nilai-nilai Anda secara keseluruhan. Mengapa tujuan ini penting bagi Anda?
-                <br><br>
-                <strong>T - Time-bound (Berbatas Waktu):</strong> Tujuan harus memiliki batas waktu yang jelas, termasuk tanggal mulai dan tanggal akhir. Kapan Anda akan mencapai tujuan ini?
+               SMART (Simple Multi-Attribute Rating Technique) is a decision support system that helps evaluate and rank alternatives based on multiple criteria. It's used to solve multi-criteria decision-making problems, where each alternative is evaluated based on its performance against several attributes, each with a defined weight. The method calculates an overall score for each alternative by summing up the weighted performance scores, allowing for a structured comparison and selection of the best option. 
             </p>
         </div>
     </div>

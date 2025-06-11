@@ -4,37 +4,72 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-// ... (import model lain jika diperlukan)
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 
 class ProfileController extends Controller
 {
-    // ... (metode index dan showHistory yang sudah ada) ...
-
-    // Tambahkan metode edit ini
-    public function edit()
+    /**
+     * Menampilkan halaman profil user.
+     */
+    public function index()
     {
-        $user = Auth::user(); // Ambil user yang sedang login
-        return view('profile.edit', compact('user')); // Tampilkan view dengan form edit
+        // Mengambil data user yang sedang terautentikasi
+        $user = Auth::user();
+        
+        // Mengirim data user ke view 'user.profile'
+        return view('user.profile', compact('user'));
     }
 
-    // Tambahkan metode update (untuk menangani POST/PUT dari form edit)
+    /**
+     * Memperbarui informasi profil user.
+     */
     public function update(Request $request)
     {
         $user = Auth::user();
 
-        // Validasi input dari form
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email,' . $user->id, // email harus unik kecuali untuk user itu sendiri
-            // Tambahkan validasi lain seperti password jika ingin diubah
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
         ]);
 
-        // Update data user
         $user->name = $request->name;
         $user->email = $request->email;
-        // $user->password = Hash::make($request->password); // Jika ingin ubah password
         $user->save();
 
-        return redirect()->route('profile.index')->with('success', 'Profile updated successfully!');
+        return back()->with('status', 'profile-updated');
+    }
+
+    public function edit()
+    {
+        return view('user.profile_edit', [
+            'user' => Auth::user(),
+        ]);
+    }
+
+
+    /**
+     * Memperbarui password user.
+     */
+    public function updatePassword(Request $request)
+    {
+        $validated = $request->validate([
+            'current_password' => ['required', 'current_password'],
+            'password' => ['required', Password::defaults(), 'confirmed'],
+        ]);
+
+        $request->user()->update([
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        return back()->with('status', 'password-updated');
+    }
+
+
+    public function history()
+    {
+        // Nanti, di sini kita akan mengambil data riwayat dari database
+        // $histories = auth()->user()->calculationHistories;
+        return view('user.profile_history'); // Kita akan buat view ini
     }
 }

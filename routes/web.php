@@ -73,7 +73,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/investment/{type}', [InvestmentController::class, 'show'])->name('investment.show');
 
     // Rute untuk menampilkan history perhitungan di profil user
-    Route::get('/profile/history', [ProfileController::class, 'showHistory'])->name('profile.history');
+    Route::get('/profile/history', [ProfileController::class, 'history'])->name('profile.history');
 
 
     // Route untuk Admin (hanya admin yang sudah login)
