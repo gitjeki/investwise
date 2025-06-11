@@ -5,7 +5,7 @@
 
     <header class="mb-8">
         {{-- Tombol kembali --}}
-        <a href="{{ route('profile') }}" class="inline-flex items-center text-gray-600 hover:text-gray-900 mb-4">
+        <a href="{{ route('profile.index') }}" class="inline-flex items-center text-gray-600 hover:text-gray-900 mb-4">
             <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
             Kembali ke Profil
         </a>

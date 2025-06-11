@@ -65,6 +65,7 @@
         Route::post('/user/recommendation/questions/submit', [RecommendationController::class, 'submitQuestion'])->name('user.recommendation.submit_question');
 
         // Pengaturan Profil User
+        // routes/web.php (di dalam grup middleware 'auth')
         Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
         Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
