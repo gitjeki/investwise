@@ -7,7 +7,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call(InitialInvestmentDataSeeder::class);
-        // Jika Anda punya AdminUserSeeder, panggil juga:
-        // $this->call(AdminUserSeeder::class);
+        $this->call(ArticleSeeder::class);
+        $this->call(AdminUserSeeder::class);
     }
 }
