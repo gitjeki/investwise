@@ -42,21 +42,35 @@ class LoginRegisterController extends Controller
         $request->validate([
             'name' => 'required|string|max:250',
             'email' => 'required|email|max:250|unique:users',
-            'password' => 'required|min:8|confirmed'
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'confirmed',
+                'regex:/[a-z]/',      // Setidaknya satu huruf kecil
+                'regex:/[A-Z]/',      // Setidaknya satu huruf besar
+                'regex:/[0-9]/',      // Setidaknya satu angka
+            ],
+        ], [
+            'password.regex' => 'Password must contain a combination of uppercase, lowercase, and numbers.',
+            'password.min' => 'Password must be at least :min characters.',
+            'password.confirmed' => 'Password confirmation does not match.',
+            'password.regex:/[a-z]/' => 'Password must contain at least one lowercase letter.',
+            'password.regex:/[A-Z]/' => 'Password must contain at least one uppercase letter.',
+            'password.regex:/[0-9]/' => 'Password must contain at least one number.',
         ]);
 
         User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => 'user' // Auto-set role to 'user' on registration
+            'role' => 'user'
         ]);
 
         $credentials = $request->only('email', 'password');
         Auth::attempt($credentials);
         $request->session()->regenerate();
 
-        // Redirect based on role after successful registration
         if (Auth::user()->role === 'admin') {
             return redirect()->route('admin.dashboard')
                 ->withSuccess('You have successfully registered & logged in!');
@@ -94,7 +108,6 @@ class LoginRegisterController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            // Redirect based on user role
             if (Auth::user()->role === 'admin') {
                 return redirect()->route('admin.dashboard')
                     ->withSuccess('You have successfully logged in as Admin!');
