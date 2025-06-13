@@ -43,12 +43,20 @@ class InvestmentInstrumentController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            // Hapus aturan 'unique:investment_instruments,name'
+        // Get all criteria to dynamically build validation rules for scores
+        $criterias = Criteria::all();
+        $validationRules = [
             'name' => 'required|max:255',
             'type' => 'nullable|string|max:255',
-            // Validasi skor kriteria (opsional, bisa ditambahkan sesuai kebutuhan)
-        ]);
+        ];
+
+        // Add validation rules for each criteria score: must be an integer and cannot be negative
+        foreach ($criterias as $criteria) {
+            $scoreFieldName = 'criteria_scores_' . $criteria->id;
+            $validationRules[$scoreFieldName] = 'nullable|integer|min:0'; // Ensure integer and non-negative
+        }
+
+        $request->validate($validationRules);
 
         $instrument = InvestmentInstrument::create([
             'name' => $request->name,
@@ -56,9 +64,9 @@ class InvestmentInstrumentController extends Controller
         ]);
 
         // LOGIKA PENYIMPANAN SKOR ALTERNATIF DITAMBAHKAN KEMBALI
-        $criterias = Criteria::all();
         foreach ($criterias as $criteria) {
             $scoreFieldName = 'criteria_scores_' . $criteria->id;
+            // Check if the score field exists and is a valid number (already validated above)
             if ($request->has($scoreFieldName) && is_numeric($request->$scoreFieldName)) {
                 AlternativeScore::create([
                     'instrument_id' => $instrument->id,
@@ -110,19 +118,29 @@ class InvestmentInstrumentController extends Controller
      */
     public function update(Request $request, InvestmentInstrument $investmentInstrument)
     {
-        $request->validate([
+        // Get all criteria to dynamically build validation rules for scores
+        $criterias = Criteria::all();
+        $validationRules = [
             'name' => 'required|max:255',
             'type' => 'nullable|string|max:255',
-        ]);
+        ];
+
+        // Add validation rules for each criteria score: must be an integer and cannot be negative
+        foreach ($criterias as $criteria) {
+            $scoreFieldName = 'criteria_scores_' . $criteria->id;
+            $validationRules[$scoreFieldName] = 'nullable|integer|min:0'; // Ensure integer and non-negative
+        }
+
+        $request->validate($validationRules);
 
         $investmentInstrument->update([
             'name' => $request->name,
             'type' => $request->type,
         ]);
 
-        $criterias = Criteria::all();
         foreach ($criterias as $criteria) {
             $scoreFieldName = 'criteria_scores_' . $criteria->id;
+            // Check if the score field exists and is a valid number (already validated above)
             if ($request->has($scoreFieldName) && is_numeric($request->$scoreFieldName)) {
                 AlternativeScore::updateOrCreate(
                     [
@@ -134,10 +152,12 @@ class InvestmentInstrumentController extends Controller
                     ]
                 );
             } else {
-                // Opsional: Jika skor tidak ada di request, hapus atau biarkan saja
+                // If a score for a criteria is not present in the request (e.g., cleared by user),
+                // you might want to delete the existing score or set it to a default.
+                // For now, it's left as is, but if you want to explicitly remove it, uncomment below:
                 // AlternativeScore::where('instrument_id', $investmentInstrument->id)
-                //                 ->where('criteria_id', $criteria->id)
-                //                 ->delete();
+                //     ->where('criteria_id', $criteria->id)
+                //     ->delete();
             }
         }
 
